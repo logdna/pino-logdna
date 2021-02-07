@@ -1,0 +1,29 @@
+pino-logdna - Pino transport for sending logs to LogDNA
+
+  Usage: 
+    pino-logdna --key "YOUR INGESTION KEY" [options]
+  
+  Example: 
+    ./my-app | pino-logdna --key "YOUR INGESTION KEY" --env staging --tag foo --tag bar
+  
+  Options:
+    -v, --version                   Show version
+    -h, --help                      Show usage information
+    -m, --message-key [msg]         The field in the `pino` used as the display line in LogDNA 
+
+  @logdna/logger Options:
+        --key                       *REQUIRED* Your ingestion key
+    -t, --tag                       Tag to be added to each message; can be supplied multiple times
+    -T, --timeout [30000]           Millisecond timeout for each HTTP request
+        --app [default]             Arbitrary app name for labeling each message
+    -E, --env                       An environment label attached to each message
+    -H, --hostname                  Hostname for each HTTP request
+        --mac                       MAC address for each HTTP request
+        --ip                        IPv4 or IPv6 address for each HTTP request
+        --url                       URL of the logging server
+        --flush-limit [5000000]     Maximum total line lengths before a flush is forced
+        --flush-interval-ms [250]   Mseconds to wait before sending the buffer
+        --base-backoff-ms [3000]    Minimum exponential backoff time in milliseconds
+        --max-backoff-ms [30000]    Maximum exponential backoff time in milliseconds
+        --index-meta [false]        Controls whether meta data for each message is searchable
+    -p, --proxy                     The full URL of an http or https proxy to pass through

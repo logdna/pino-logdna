@@ -1,0 +1,12 @@
+{"level":30,"time":1612675898238,"pid":34442,"hostname":"logs.local","msg":"hello world"}
+{"level":50,"time":1612675898239,"pid":34442,"hostname":"logs.local","msg":"this is at error level"}
+{"level":30,"time":1612675898239,"pid":34442,"hostname":"logs.local","msg":"the answer is 42"}
+{"level":"info","time":1612675898239,"pid":34442,"hostname":"logs.local","obj":42,"msg":"hello world"}
+
+non-pino output
+{malformed json}
+{"level":30,"pid":34442,"obj":42,"b":2,"note":"does not have message or timestamp"}
+
+{"pid":34442,"hostname":"logs.local","msg":"no timestamp or level"}
+{"level":"40","time":1612675898239,"pid":34442,"hostname":"logs.local","obj":42,"b":2,"msg":"hello world with an invalid level"}
+{"level":50,"time":1612675898239,"pid":34442,"hostname":"logs.local","stack":"Error: an error\n    at Object.<anonymous> (/home/test/code/pino-logdna/example.js:14:12)\n    at Module._compile (internal/modules/cjs/loader.js:1063:30)\n    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)\n    at Module.load (internal/modules/cjs/loader.js:928:32)\n    at Function.Module._load (internal/modules/cjs/loader.js:769:14)\n    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:72:12)\n    at internal/main/run_main_module.js:17:47","type":"Error","msg":"an error"}

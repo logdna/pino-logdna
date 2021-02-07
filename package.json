@@ -1,0 +1,81 @@
+{
+  "name": "pino-logdna",
+  "version": "0.0.0",
+  "description": "Transport pino logs to LogDNA",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "index.js",
+  "bin": {
+    "pino-logdna": "bin/cli.js"
+  },
+  "files": [
+    "lib",
+    "bin",
+    "index.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "tap": "tap",
+    "lint": "eslint ./",
+    "lint:fix": "npm run lint -- --fix",
+    "test": "tap",
+    "test:ci": "tools/test-ci.sh",
+    "pretest": "npm run lint",
+    "pretest:ci": "npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/logdna/pino-logdna.git"
+  },
+  "keywords": [
+    "logdna",
+    "logging",
+    "pino"
+  ],
+  "author": {
+    "name": "LogDNA, Inc.",
+    "email": "help@logdna.com"
+  },
+  "contributors": [
+    {
+      "name": "Mike Del Tito",
+      "email": "mike.deltito@logdna.com"
+    }
+  ],
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/logdna/pino-logdna/issues"
+  },
+  "homepage": "https://github.com/logdna/pino-logdna#readme",
+  "dependencies": {
+    "@logdna/logger": "^2.2.2",
+    "nopt": "^5.0.0",
+    "pumpify": "^2.0.1",
+    "split2": "^3.2.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.19.0",
+    "eslint-config-logdna": "^4.0.2",
+    "execa": "^4.1.0",
+    "nock": "^13.0.7",
+    "pino": "^6.11.0",
+    "tap": "^14.11.0",
+    "tap-parser": "^10.1.0",
+    "tap-xunit": "^2.4.1"
+  },
+  "eslintConfig": {
+    "root": true,
+    "ignorePatterns": [
+      "node_modules/",
+      "coverage/"
+    ],
+    "extends": [
+      "logdna"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2019
+    }
+  }
+}
