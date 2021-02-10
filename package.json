@@ -23,11 +23,18 @@
     "test": "tap",
     "test:ci": "tools/test-ci.sh",
     "pretest": "npm run lint",
-    "pretest:ci": "npm run lint"
+    "pretest:ci": "npm run lint",
+    "release": "semantic-release"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "extends": "semantic-release-config-logdna"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/logdna/pino-logdna.git"
+    "url": "git+ssh://git@github.com/logdna/pino-logdna.git"
   },
   "keywords": [
     "logdna",
@@ -61,6 +68,8 @@
     "execa": "^4.1.0",
     "nock": "^13.0.7",
     "pino": "^6.11.0",
+    "semantic-release": "^17.3.8",
+    "semantic-release-config-logdna": "^1.0.0",
     "tap": "^14.11.0",
     "tap-parser": "^10.1.0",
     "tap-xunit": "^2.4.1"
