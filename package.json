@@ -45,12 +45,6 @@
     "name": "LogDNA, Inc.",
     "email": "help@logdna.com"
   },
-  "contributors": [
-    {
-      "name": "Mike Del Tito",
-      "email": "mike.deltito@logdna.com"
-    }
-  ],
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
     "url": "https://github.com/logdna/pino-logdna/issues"
