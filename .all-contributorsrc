@@ -1,0 +1,30 @@
+{
+  "projectName": "pino-logdna",
+  "projectOwner": "logdna",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "digitalmio",
+      "name": "Maciej Ziehlke",
+      "avatar_url": "https://avatars.githubusercontent.com/u/226042?v=4",
+      "profile": "https://www.linkedin.com/in/ziehlke/",
+      "contributions": [
+        "original"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "types": {
+    "original": {
+      "symbol": "⭐",
+      "description": "Original author/maintainer"
+    }
+  }
+}
