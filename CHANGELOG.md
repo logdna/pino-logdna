@@ -1,5 +1,33 @@
 ## Changelog
 
+# [3.0.0](https://github.com/logdna/pino-logdna/compare/v2.0.0...v3.0.0) (2021-10-27)
+
+
+### Chores
+
+* **deps**: add pino-abstract-transport@0.4.0 [1de4429](https://github.com/logdna/pino-logdna/commit/1de44290d4b91f40e14c77ba10b17799acf7c3ca) - Mike Del Tito
+* **deps**: remove unused depdendencies [7122edd](https://github.com/logdna/pino-logdna/commit/7122edde9429839fb94928938a8f16e0327ab899) - Mike Del Tito
+* **deps**: update eslint-config-logdna@5.1.0 [1d95205](https://github.com/logdna/pino-logdna/commit/1d952054b71104f794cf33f92963393255872a79) - Mike Del Tito
+* **deps**: update eslint@7.32.0 [6460338](https://github.com/logdna/pino-logdna/commit/64603383c2456511baa053e8252f8d856c2b3405) - Mike Del Tito
+* **deps**: update logdna/logger@2.4.1 [2301db4](https://github.com/logdna/pino-logdna/commit/2301db491aefe2fdb48430b2697eaaabfe8927d4) - Mike Del Tito
+* **deps**: update pino@7.0.5 [53ff8c5](https://github.com/logdna/pino-logdna/commit/53ff8c5639c84c4c29bc4487237c174d6a186196) - Mike Del Tito
+* **deps**: update tap@15.0.10 [458b6a3](https://github.com/logdna/pino-logdna/commit/458b6a3eca575360076c570e9689fbc5873c2b29) - Mike Del Tito
+
+
+### Features
+
+* implement pino@7 transport interface [8933c41](https://github.com/logdna/pino-logdna/commit/8933c41c97ba2ec941453e1ebe79b43deaecfb2a) - Mike Del Tito, closes: [#3](https://github.com/logdna/pino-logdna/issues/3)
+
+
+### **BREAKING CHANGES**
+
+* This transport is now untested *as an in-process log
+destination* for `pino < 7.0.0`, and while it may work, it is not recommended
+and will no longer be officially supported. Users that wish to use the
+latest version of `pino-logdna` with earlier versions of `pino` should
+pipe program output to the transport instead. See
+https://getpino.io/#/docs/transports?id=legacy-transports
+
 # [2.0.0](https://github.com/logdna/pino-logdna/compare/v1.0.0...v2.0.0) (2021-02-19)
 
 
