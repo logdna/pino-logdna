@@ -51,7 +51,7 @@
   },
   "homepage": "https://github.com/logdna/pino-logdna#readme",
   "dependencies": {
-    "@logdna/logger": "^2.2.2",
+    "@logdna/logger": "^2.4.1",
     "nopt": "^5.0.0",
     "pumpify": "^2.0.1",
     "split2": "^3.2.2"
