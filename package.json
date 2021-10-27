@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "eslint": "^7.19.0",
-    "eslint-config-logdna": "^4.0.2",
+    "eslint-config-logdna": "^5.1.0",
     "execa": "^4.1.0",
     "nock": "^13.0.7",
     "pino": "^6.11.0",
@@ -78,7 +78,7 @@
       "logdna"
     ],
     "parserOptions": {
-      "ecmaVersion": 2019
+      "ecmaVersion": 2020
     }
   }
 }
