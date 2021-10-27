@@ -1,59 +1,66 @@
 'use strict'
 
+const {promisify} = require('util')
 const os = require('os')
+const {once} = require('events')
 const {test} = require('tap')
-const nock = require('nock')
 const pino = require('pino')
-const pinoLogdna = require('../lib/stream.js')
-
-nock.disableNetConnect()
+const createTestServer = require('./common/test-server.js')
+const timeout = promisify(setTimeout)
 
 test('pinoLogdna', async (t) => {
   const key = 'testing'
-  const url = 'http://example.org'
   const oshost = os.hostname()
 
-  t.test('defaults', (t) => {
-    const transport = pinoLogdna({key, url})
-    const log = pino({}, transport)
-
-    const scope = nock(url)
-      .post('/', ({e, ls}) => {
-        t.strictEqual(e, 'ls', 'event matches')
-        t.strictEqual(ls.length, 1, 'number of logs matches')
-        t.match(ls, [
-          {
-            line: 'test'
-          , level: 'INFO'
-          , app: 'default'
-          , timestamp: Number
-          }
-        ], 'line payload content matches')
-        t.strictEqual(
-          ls[0].meta
-        , `{"pid":${process.pid},"foo":"bar","hostname":"test.local"}`
-        , 'unindexed meta contains expected properties')
-
-        return true
-      })
-      .query((qs) => {
-        t.ok(qs.now, 'timestamp present in query')
-        t.strictEqual(qs.hostname, oshost, 'os.hostname present in query')
-        return true
-      })
-      .reply(200, 'done')
-
-    scope.on('replied', () => {
-      t.end()
+  t.test('defaults', async (t) => {
+    let requests = 0
+    const {listen, close} = createTestServer(({body, query}) => {
+      requests++
+      t.equal(body.e, 'ls', 'event matches')
+      t.equal(body.ls.length, 1, 'number of logs matches')
+      t.match(body.ls, [
+        {
+          line: 'test'
+        , level: 'INFO'
+        , app: 'default'
+        , timestamp: Number
+        }
+      ], 'line payload content matches')
+      t.equal(
+        body.ls[0].meta
+      , `{"pid":${process.pid},"foo":"bar","hostname":"test.local"}`
+      , 'unindexed meta contains expected properties')
+      t.ok(query.now, 'timestamp present in query')
+      t.equal(query.hostname, oshost, 'os.hostname present in query')
     })
 
+    const url = await listen(0)
+    const transport = pino.transport({
+      targets: [{
+        target: '../lib/stream.js'
+      , options: {
+          key
+        , url
+        }
+      }]
+    })
+
+    t.teardown(async () => {
+      transport.end()
+      await close()
+    })
+
+    const log = pino(transport)
+    await once(transport, 'ready')
+
     log.info({foo: 'bar', hostname: 'test.local'}, 'test')
+    await timeout(2000)
+    t.equal(requests, 1, 'one request sent')
   })
 
-  t.test('with options', (t) => {
+  t.test('with options', async (t) => {
     const opts = {
       key
-    , url
     , app: 'test-app'
     , env: 'test-env'
     , mac: 'FF:E4:E6:EF:CE:57'
@@ -63,101 +70,86 @@ test('pinoLogdna', async (t) => {
     , indexMeta: true
     , messageKey: 'message'
     }
-    const transport = pinoLogdna(opts)
-    const log = pino({messageKey: opts.messageKey}, transport)
 
-    const scope = nock(url)
-      .post('/', ({e, ls}) => {
-        t.strictEqual(e, 'ls', 'event matches')
-        t.strictEqual(ls.length, 3, 'number of logs matches')
-        t.match(ls, [
-          {
-            line: 'one'
-          , level: 'INFO'
-          , app: 'test-app'
-          , env: 'test-env'
-          , timestamp: Number
-          , meta: {
-              pid: process.pid
-            , hostname: oshost
+    let requests = 0
+    const {listen, close} = createTestServer(({body, query}) => {
+      requests++
+      t.ok(query.now, 'timestamp present in query')
+      t.equal(query.hostname, opts.hostname, 'hostname matches supplied option')
+      t.equal(query.ip, opts.ip, 'ip matches supplied option')
+      t.equal(query.mac, opts.mac, 'mac matches supplied option')
+      t.equal(query.tags, opts.tags, 'tags match supplied option')
+      t.equal(body.e, 'ls', 'event matches')
+      t.equal(body.ls.length, 3, 'number of logs matches')
+      t.match(body.ls, [
+        {
+          line: 'one'
+        , level: 'INFO'
+        , app: 'test-app'
+        , env: 'test-env'
+        , timestamp: Number
+        , meta: {
+            pid: process.pid
+          , hostname: oshost
+          }
+        }
+      , {
+          line: 'two'
+        , level: 'INFO'
+        , app: 'test-app'
+        , env: 'test-env'
+        , timestamp: Number
+        , meta: {
+            foo: 'bar'
+          , pid: process.pid
+          , hostname: oshost
+          }
+        }
+      , {
+          line: 'three'
+        , level: 'ERROR'
+        , app: 'test-app'
+        , env: 'test-env'
+        , timestamp: Number
+        , meta: {
+            pid: process.pid
+          , hostname: oshost
+          , err: {
+              type: 'Error'
+            , message: 'Fail'
+            , stack: String
             }
           }
-        , {
-            line: 'two'
-          , level: 'INFO'
-          , app: 'test-app'
-          , env: 'test-env'
-          , timestamp: Number
-          , meta: {
-              foo: 'bar'
-            , pid: process.pid
-            , hostname: oshost
-            }
-          }
-        , {
-            line: 'three'
-          , level: 'ERROR'
-          , app: 'test-app'
-          , env: 'test-env'
-          , timestamp: Number
-          , meta: {
-              pid: process.pid
-            , hostname: oshost
-            , err: {
-                type: 'Error'
-              , message: 'Fail'
-              , stack: String
-              }
-            }
-          }
-        ], 'line payload content matches')
-
-        return true
-      })
-      .query((qs) => {
-        t.ok(qs.now, 'timestamp present in query')
-        t.strictEqual(qs.hostname, opts.hostname, 'hostname matches supplied option')
-        t.strictEqual(qs.ip, opts.ip, 'ip matches supplied option')
-        t.strictEqual(qs.mac, opts.mac, 'mac matches supplied option')
-        t.strictEqual(qs.tags, opts.tags, 'tags match supplied option')
-        return true
-      })
-      .reply(200, 'done')
-
-    scope.on('replied', () => {
-      t.end()
+        }
+      ], 'line payload content matches')
     })
+
+    const url = await listen(0)
+    const transport = pino.transport({
+      targets: [{
+        target: '../lib/stream.js'
+      , options: {
+          ...opts
+        , url
+        }
+      }]
+    })
+
+    t.teardown(async () => {
+      transport.end()
+      await close()
+    })
+
+    const log = pino({messageKey: 'message'}, transport)
+    await once(transport, 'ready')
 
     log.info('one')
     log.info({foo: 'bar'}, 'two')
     log.error({
       err: new Error('Fail')
-    , message: 'three'
-    })
-  })
+    }, 'three')
 
-  t.test('flushes on stream close', (t) => {
-    const transport = pinoLogdna({
-      key
-    , url
-    // extend timeout so logger does not auto-flush
-    , flushIntervalMs: 10000
-    })
-    const log = pino({}, transport)
-
-    nock(url)
-      .post('/', () => {
-        return true
-      })
-      .query((qs) => {
-        return true
-      })
-      .reply(200, 'done')
-
-    log.info('one')
-    transport.on('finish', () => {
-      t.end()
-    })
-    transport.end()
+    await timeout(2000)
+    t.equal(requests, 1, 'one request sent')
   })
 })

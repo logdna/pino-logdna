@@ -5,67 +5,69 @@
 
 > Transport pino logs to LogDNA
 
-* [Install](#install)
-* [Usage](#usage)
-  - [CLI](#cli)
-  - [API](#api)
-* [Options](#options)
-* [License](#license)
+- [pino-logdna](#pino-logdna)
+  - [Install](#install)
+  - [Usage](#usage)
+    - [Pino v7+ Transport](#pino-v7-transport)
+      - [Options](#options)
+    - [Legacy Transport](#legacy-transport)
+      - [CLI Options](#cli-options)
+  - [Contributors ✨](#contributors-)
+  - [License](#license)
 
 ## Install
 
 ```bash
-npm install -g pino-logdna
+npm install --save pino-logdna
 ```
 
 ## Usage
 
-### CLI
+### Pino v7+ Transport
 
-The minimal configuration requires only your LogDNA ingestion key:
+This module can be used as a [pino transport][]:
+
+```javascript
+const pino = require('pino')
+const transport = pino.transport({
+  target: 'pino-logdna',
+  options: {
+    key // your LogDNA ingestion key
+  }
+})
+
+const log = pino(transport)
+
+// Logs will now go to LogDNA
+log.info('Happy Logging!')
+```
+
+#### Options
+
+This transport uses [`@logdna/logger`][] under the hood, and most options are exposed
+through `pino-logdna`. 
+
+For a full list, please see the [`createLogger` options][]
+
+### Legacy Transport
+
+Usage as a legacy transport is still supported. The minimal configuration requires only 
+your LogDNA ingestion key:
 
 ```bash
+npm install -g pino-logdna
 node ./app.js | pino-logdna --key="YOUR INGESTION KEY"
 ```
 
-[Options](#options) can be supplied to the command:
+[CLI Options](#cli-options) can be supplied to the command:
 
 ```bash
 node ./app.js | pino-logdna --key "YOUR INGESTION KEY" --env staging --tag foo --tag bar
 ```
 
-### API
+#### CLI Options
 
-Pino generally recommends against [in-process transports][], however it _is_ possible to 
-use this transport as a log destination in your application:
-
-```js
-const pinoLogdna = require('pino-logdna')
-const opts = { /* pino options */ }
-const stream = pinoLogdna({key: process.env.LOGDNA_INGESTION_KEY})
-const log = pino(opts, stream)
-
-// It is recommended to attach a handler for the logger error event:
-stream.on('error', (err) => {
-  // Output to stderr
-  console.error(err)
-})
-
-// You may also pass an `onError` handler as an option:
-// pinoLogdna({
-//   key: process.env.LOGDNA_INGESTION_KEY
-// , onError: console.error
-// })
-
-// Logs now go to LogDNA
-log.debug('Happy logging!') 
-```
-
-## Options
-
-This transport uses [`@logdna/logger`][] under the hood, and most options are exposed
-through `pino-logdna`. Note that options for the CLI are the kebab-case equivalent of the
-[`@logdna/logger`][] options:
+Options for the CLI are the kebab-case equivalent of the [`@logdna/logger`][] options:
 
 ```bash
 Options:
@@ -118,5 +120,7 @@ Copyright © [LogDNA](https://logdna.com), released under an MIT license. See th
 
 *Happy Logging!*
 
-[in-process transports]: https://getpino.io/#/docs/transports?id=in-process-transports
+[pino transport]: https://getpino.io/#/docs/transports?id=v7-transports
+[legacy transport]: https://getpino.io/#/docs/transports?id=legacy-transports
 [`@logdna/logger`]: https://github.com/logdna/logger-node#api
+[`createLogger` options]: https://github.com/logdna/logger-node#createloggerkey-options
