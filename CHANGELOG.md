@@ -1,5 +1,12 @@
 ## Changelog
 
+## [3.0.1](https://github.com/logdna/pino-logdna/compare/v3.0.0...v3.0.1) (2022-05-06)
+
+
+### Bug Fixes
+
+* upgrade pino-abstract-transport from 0.4.0 to 0.5.0 [1be9bb7](https://github.com/logdna/pino-logdna/commit/1be9bb71b4f1fe61eca2c4715a30dcd1667406e5) - Mike Del Tito
+
 # [3.0.0](https://github.com/logdna/pino-logdna/compare/v2.0.0...v3.0.0) (2021-10-27)
 
 
