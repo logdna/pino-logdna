@@ -1,15 +1,16 @@
 pino-logdna - Pino transport for sending logs to LogDNA
 
-  Usage: 
+  Usage:
     pino-logdna --key "YOUR INGESTION KEY" [options]
-  
-  Example: 
+
+  Example:
     ./my-app | pino-logdna --key "YOUR INGESTION KEY" --env staging --tag foo --tag bar
-  
+
   Options:
     -v, --version                   Show version
     -h, --help                      Show usage information
-    -m, --message-key [msg]         The field in the `pino` used as the display line in LogDNA 
+    -m, --message-key [msg]         The field in the `pino` used as the display line in LogDNA
+    -e, --empty-message [msg]       String value to use when no "message" property if found
 
   @logdna/logger Options:
         --key                       *REQUIRED* Your ingestion key

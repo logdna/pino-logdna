@@ -22,6 +22,7 @@
     "lint:fix": "npm run lint -- --fix",
     "test": "tap",
     "test:ci": "tools/test-ci.sh",
+    "test:watch": "tap --no-coverage-report -w",
     "pretest": "npm run lint",
     "pretest:ci": "npm run lint",
     "release": "semantic-release"
