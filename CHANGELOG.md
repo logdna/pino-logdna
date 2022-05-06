@@ -1,5 +1,12 @@
 ## Changelog
 
+## [3.0.2](https://github.com/logdna/pino-logdna/compare/v3.0.1...v3.0.2) (2022-05-06)
+
+
+### Bug Fixes
+
+* data logs being dropped [3353e5e](https://github.com/logdna/pino-logdna/commit/3353e5e243f694c5f256fa86e40363a49c93a1a9) - James Sumners
+
 ## [3.0.1](https://github.com/logdna/pino-logdna/compare/v3.0.0...v3.0.1) (2022-05-06)
 
 
