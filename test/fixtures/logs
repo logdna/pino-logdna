@@ -5,7 +5,7 @@
 
 non-pino output
 {malformed json}
-{"level":30,"pid":34442,"obj":42,"b":2,"note":"does not have message or timestamp"}
+{"level":30,"pid":34442,"obj":42,"b":2,"hostname":"logs.local","note":"does not have message or timestamp"}
 
 {"pid":34442,"hostname":"logs.local","msg":"no timestamp or level"}
 {"level":"40","time":1612675898239,"pid":34442,"hostname":"logs.local","obj":42,"b":2,"msg":"hello world with an invalid level"}

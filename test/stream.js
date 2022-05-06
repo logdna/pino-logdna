@@ -152,4 +152,95 @@ test('pinoLogdna', async (t) => {
     await timeout(2000)
     t.equal(requests, 1, 'one request sent')
   })
+
+  t.test('data logs get sent correctly', async (t) => {
+    t.plan(6)
+
+    const {listen, close} = createTestServer(({body, query}) => {
+      t.equal(body.e, 'ls', 'event matches')
+      t.equal(body.ls.length, 1, 'number of logs matches')
+      t.match(body.ls, [
+        {
+          line: '<data log>'
+        , level: 'INFO'
+        , app: 'default'
+        , timestamp: Number
+        }
+      ], 'line payload content matches')
+      t.equal(
+        body.ls[0].meta
+      , `{"pid":${process.pid},"foo":"bar","hostname":"${oshost}"}`
+      , 'unindexed meta contains expected properties')
+      t.ok(query.now, 'timestamp present in query')
+      t.equal(query.hostname, oshost, 'os.hostname present in query')
+    })
+
+    const url = await listen(0)
+    const transport = pino.transport({
+      targets: [{
+        target: '../lib/stream.js'
+      , options: {
+          key
+        , url
+        }
+      }]
+    })
+
+    t.teardown(async () => {
+      transport.end()
+      await close()
+    })
+
+    const log = pino(transport)
+    await once(transport, 'ready')
+
+    log.info({foo: 'bar'})
+    await timeout(2000)
+  })
+
+  t.test('data logs support custom empty message', async (t) => {
+    t.plan(6)
+
+    const {listen, close} = createTestServer(({body, query}) => {
+      t.equal(body.e, 'ls', 'event matches')
+      t.equal(body.ls.length, 1, 'number of logs matches')
+      t.match(body.ls, [
+        {
+          line: '<json log>'
+        , level: 'INFO'
+        , app: 'default'
+        , timestamp: Number
+        }
+      ], 'line payload content matches')
+      t.equal(
+        body.ls[0].meta
+      , `{"pid":${process.pid},"foo":"bar","hostname":"${oshost}"}`
+      , 'unindexed meta contains expected properties')
+      t.ok(query.now, 'timestamp present in query')
+      t.equal(query.hostname, oshost, 'os.hostname present in query')
+    })
+
+    const url = await listen(0)
+    const transport = pino.transport({
+      targets: [{
+        target: '../lib/stream.js'
+      , options: {
+          emptyMessage: '<json log>'
+        , key
+        , url
+        }
+      }]
+    })
+
+    t.teardown(async () => {
+      transport.end()
+      await close()
+    })
+
+    const log = pino(transport)
+    await once(transport, 'ready')
+
+    log.info({foo: 'bar'})
+    await timeout(2000)
+  })
 })

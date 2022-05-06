@@ -45,13 +45,19 @@ log.info('Happy Logging!')
 #### Options
 
 This transport uses [`@logdna/logger`][] under the hood, and most options are exposed
-through `pino-logdna`. 
+through `pino-logdna`.
 
-For a full list, please see the [`createLogger` options][]
+For a full list, please see the [`createLogger` options][].
+
+An additional option is supported by `pino-logdna`:
+
++ `emptyMessage` `<String>` - When logging an object without a message,
+e.g. `log.info({ some: 'data' })`, the value of this option will be used
+for the outgoing message. Default: `'<data log>'`.
 
 ### Legacy Transport
 
-Usage as a legacy transport is still supported. The minimal configuration requires only 
+Usage as a legacy transport is still supported. The minimal configuration requires only
 your LogDNA ingestion key:
 
 ```bash
@@ -73,7 +79,8 @@ Options for the CLI are the kebab-case equivalent of the [`@logdna/logger`][] op
 Options:
   -v, --version                   Show version
   -h, --help                      Show usage information
-  -m, --message-key [msg]         The field in the `pino` used as the display line in LogDNA 
+  -m, --message-key [msg]         The field in the `pino` used as the display line in LogDNA
+  -e, --empty-message [msg]       String value to use when no "message" property if found
 
 @logdna/logger Options:
       --key                       *REQUIRED* Your ingestion key

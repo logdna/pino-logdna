@@ -28,12 +28,14 @@ const noptions = {
 , 'index-meta': Boolean
 , 'proxy': url
 , 'message-key': String
+, 'empty-message': String
 }
 
 const nshort = {
   h: ['--help']
 , v: ['--version']
 , m: ['--message-key']
+, e: ['--empty-message']
 , t: ['--tag']
 , T: ['--timeout']
 , H: ['--hostname']

@@ -2,6 +2,8 @@
 
 const path = require('path')
 const fs = require('fs')
+const {promisify} = require('util')
+const timeout = promisify(setTimeout)
 const {test} = require('tap')
 const execa = require('execa')
 const pkg = require('../package.json')
@@ -70,7 +72,7 @@ test('cli', async (t) => {
 
       const {e, ls} = body
       t.equal(e, 'ls', 'event matches')
-      t.equal(ls.length, 7, 'number of logs matches')
+      t.equal(ls.length, 8, 'number of logs matches')
       t.match(ls, [
         {
           timestamp: Number
@@ -111,6 +113,19 @@ test('cli', async (t) => {
             pid: 34442
           , obj: 42
           , hostname: 'logs.local'
+          }
+        }
+      , {
+        // "does not have message or timestamp" log from fixture set
+          timestamp: Number
+        , line: '<data log>'
+        , level: 'INFO'
+        , app: 'default'
+        , meta: {
+            pid: 34442
+          , hostname: 'logs.local'
+          , obj: 42
+          , b: 2
           }
         }
       , {
@@ -179,5 +194,60 @@ test('cli', async (t) => {
 
     const {stdout} = await execa(cli, args, opts)
     t.equal(stdout.trim(), logs.trim(), 'input piped to stdout')
+  })
+
+  t.test('--empty-message changes default message', async (t) => {
+    t.plan(4)
+
+    var proc
+    const {listen, close} = createTestServer(({body, query}) => {
+      t.match(query, {
+        now: String
+      , hostname: 'test.local'
+      , mac: ''
+      , ip: '10.0.0.1'
+      , tags: 'foo,bar'
+      }, 'query matches')
+
+      const {e, ls} = body
+      t.equal(e, 'ls', 'event matches')
+      t.equal(ls.length, 1, 'number of logs matches')
+      t.match(ls, [
+        {
+          timestamp: Number
+        , line: '<json log>'
+        , level: 'INFO'
+        , app: 'default'
+        , meta: {
+            pid: 34442
+          , hostname: 'logs.local'
+          }
+        }
+      ])
+
+      proc.kill()
+    })
+
+    const url = await listen(0)
+
+    t.teardown(close)
+
+    const args = [
+      '--key', 'abc123'
+    , '--url', url
+    , '--index-meta', true
+    , '--hostname', 'test.local'
+    , '--ip', '10.0.0.1'
+    , '--tag', 'foo'
+    , '--tag', 'bar',
+    , '--empty-message', '<json log>'
+    ]
+
+    proc = execa(cli, args)
+    const {stdin} = proc
+    stdin.write(
+      '{"level":30,"pid":34442,"obj":42,"b":2,"hostname":"logs.local","note":"foo"}\n'
+    )
+    await timeout(2000)
   })
 })
