@@ -1,5 +1,17 @@
 ## Changelog
 
+## [3.0.3](https://github.com/logdna/pino-logdna/compare/v3.0.2...v3.0.3) (2022-06-29)
+
+
+### Continuous Integration
+
+* add commitlint tooling and config [56f4c8b](https://github.com/logdna/pino-logdna/commit/56f4c8be067194222fa47d0ebee659f2f41a72f4) - Mike Del Tito, closes: [#7](https://github.com/logdna/pino-logdna/issues/7)
+
+
+### Documentation
+
+* **wiki**: add @jsumners as a contributor [c224933](https://github.com/logdna/pino-logdna/commit/c224933492b09fcaa83f599fe27694587717768f) - Mike Del Tito
+
 ## [3.0.2](https://github.com/logdna/pino-logdna/compare/v3.0.1...v3.0.2) (2022-05-06)
 
 
