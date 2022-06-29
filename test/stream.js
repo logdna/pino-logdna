@@ -29,7 +29,8 @@ test('pinoLogdna', async (t) => {
       t.equal(
         body.ls[0].meta
       , `{"pid":${process.pid},"foo":"bar","hostname":"test.local"}`
-      , 'unindexed meta contains expected properties')
+      , 'unindexed meta contains expected properties'
+      )
       t.ok(query.now, 'timestamp present in query')
       t.equal(query.hostname, oshost, 'os.hostname present in query')
     })
@@ -170,7 +171,8 @@ test('pinoLogdna', async (t) => {
       t.equal(
         body.ls[0].meta
       , `{"pid":${process.pid},"foo":"bar","hostname":"${oshost}"}`
-      , 'unindexed meta contains expected properties')
+      , 'unindexed meta contains expected properties'
+      )
       t.ok(query.now, 'timestamp present in query')
       t.equal(query.hostname, oshost, 'os.hostname present in query')
     })
@@ -215,7 +217,8 @@ test('pinoLogdna', async (t) => {
       t.equal(
         body.ls[0].meta
       , `{"pid":${process.pid},"foo":"bar","hostname":"${oshost}"}`
-      , 'unindexed meta contains expected properties')
+      , 'unindexed meta contains expected properties'
+      )
       t.ok(query.now, 'timestamp present in query')
       t.equal(query.hostname, oshost, 'os.hostname present in query')
     })

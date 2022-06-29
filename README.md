@@ -12,6 +12,8 @@
       - [Options](#options)
     - [Legacy Transport](#legacy-transport)
       - [CLI Options](#cli-options)
+  - [Contributing](#contributing)
+    - [Commit Format](#commit-format)
   - [Contributors ✨](#contributors-)
   - [License](#license)
 
@@ -100,6 +102,20 @@ Options:
   -p, --proxy                     The full URL of an http or https proxy to pass through
 ```
 
+## Contributing
+
+This project is open-sourced, and accepts PRs from the public for bugs or feature
+enhancements. Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for more information.
+
+### Commit Format
+
+The project uses [Commitlint][] and enforces [Conventional Commit Standard][]. Please format your commits based on these guidelines.
+
+An [issue must be opened](https://github.com/logdna/tail-file-node/issues) in the repository for any bug, feature, or anything else that will have a PR.
+
+The commit message must reference the issue with an [acceptable action tag](https://github.com/logdna/commitlint-config/blob/41aef3b69f292e39fb41a5ef24bcd7043e0fceb3/index.js#L12-L20) in the commit footer, e.g. `Fixes: #5`.
+
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
@@ -131,3 +147,5 @@ Copyright © [LogDNA](https://logdna.com), released under an MIT license. See th
 [legacy transport]: https://getpino.io/#/docs/transports?id=legacy-transports
 [`@logdna/logger`]: https://github.com/logdna/logger-node#api
 [`createLogger` options]: https://github.com/logdna/logger-node#createloggerkey-options
+[Commitlint]: https://commitlint.js.org
+[Conventional Commit Standard]: https://www.conventionalcommits.org/en/v1.0.0/

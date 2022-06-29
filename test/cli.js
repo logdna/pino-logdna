@@ -46,7 +46,8 @@ test('cli', async (t) => {
       t.match(
         err.message
       , "invalid: [ [ 'url', 'invalid-url' ], [ 'timeout', 'invalid-timeout' ]"
-      , 'error includes list of invalid options')
+      , 'error includes list of invalid options'
+      )
     }
   })
 
