@@ -1,6 +1,6 @@
 # pino-logdna
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 > Transport pino logs to LogDNA
@@ -127,6 +127,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://www.linkedin.com/in/ziehlke/"><img src="https://avatars.githubusercontent.com/u/226042?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Maciej Ziehlke</b></sub></a><br /><a href="#original-digitalmio" title="Original author/maintainer">⭐</a></td>
     <td align="center"><a href="https://github.com/mdeltito"><img src="https://avatars.githubusercontent.com/u/69520?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mike Del Tito</b></sub></a><br /><a href="https://github.com/logdna/pino-logdna/commits?author=mdeltito" title="Code">💻</a> <a href="https://github.com/logdna/pino-logdna/commits?author=mdeltito" title="Documentation">📖</a> <a href="#example-mdeltito" title="Examples">💡</a> <a href="#tool-mdeltito" title="Tools">🔧</a></td>
+    <td align="center"><a href="http://james.sumners.info/"><img src="https://avatars.githubusercontent.com/u/321201?v=4?s=100" width="100px;" alt=""/><br /><sub><b>James Sumners</b></sub></a><br /><a href="https://github.com/logdna/pino-logdna/commits?author=jsumners" title="Code">💻</a> <a href="https://github.com/logdna/pino-logdna/commits?author=jsumners" title="Documentation">📖</a></td>
   </tr>
 </table>
 
