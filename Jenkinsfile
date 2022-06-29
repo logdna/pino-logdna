@@ -1,11 +1,18 @@
 library 'magic-butler-catalogue'
 
 def PROJECT_NAME = "pino-logdna"
-def CURRENT_BRANCH = [env.CHANGE_BRANCH, env.BRANCH_NAME]?.find{branch -> branch != null}
+def REPO = "logdna/${PROJECT_NAME}"
 def TRIGGER_PATTERN = ".*@logdnabot.*"
+def DEFAULT_BRANCH = 'main'
+def CURRENT_BRANCH = [env.CHANGE_BRANCH, env.BRANCH_NAME]?.find{branch -> branch != null}
 
 pipeline {
-  agent none
+  agent {
+    node {
+      label 'ec2-fleet'
+      customWorkspace "${PROJECT_NAME}-${BUILD_NUMBER}"
+    }
+  }
 
   options {
     timestamps()
@@ -14,6 +21,13 @@ pipeline {
 
   triggers {
     issueCommentTrigger(TRIGGER_PATTERN)
+  }
+
+  environment {
+    GITHUB_TOKEN = credentials('github-api-token')
+    NPM_CONFIG_CACHE = '.npm'
+    NPM_CONFIG_USERCONFIG = '.npmrc'
+    SPAWN_WRAP_SHIM_ROOT = '.npm'
   }
 
   stages {
@@ -34,35 +48,30 @@ pipeline {
         axes {
           axis {
             name 'NODE_VERSION'
-            values '12', '14', '15'
+            values '12', '14', '16', '18'
           }
         }
 
         agent {
           docker {
-            image "us.gcr.io/logdna-k8s/node:${NODE_VERSION}-ci"
+            label 'ec2-fleet'
+            image "us.gcr.io/logdna-k8s/node:${NODE_VERSION}"
           }
         }
 
-        environment {
-          GITHUB_TOKEN = credentials('github-api-token')
-          NPM_CONFIG_CACHE = '.npm'
-          NPM_CONFIG_USERCONFIG = '.npm/rc'
-          SPAWN_WRAP_SHIM_ROOT = '.npm'
-        }
-
         stages {
-
           stage('Test') {
             steps {
-              sh 'mkdir -p .npm coverage'
+              sh "mkdir -p ${NPM_CONFIG_CACHE}"
+              sh 'mkdir -p coverage'
               sh 'npm install'
               sh 'npm run test:ci'
             }
 
             post {
               always {
-                junit 'coverage/test.xml'
+                junit checksName: 'Test Results', testResults: 'coverage/*.xml'
+
                 publishHTML target: [
                   allowMissing: false,
                   alwaysLinkToLastBuild: false,
@@ -80,66 +89,64 @@ pipeline {
 
     stage('Test Release') {
       when {
-        beforeAgent true
         not {
-          branch 'main'
+          branch DEFAULT_BRANCH
         }
       }
 
       agent {
         docker {
-          image "us.gcr.io/logdna-k8s/node:12-ci"
+          label 'ec2-fleet'
+          image "us.gcr.io/logdna-k8s/node:16-ci"
           customWorkspace "${PROJECT_NAME}-${BUILD_NUMBER}"
         }
       }
 
       environment {
-        GITHUB_TOKEN = credentials('github-api-token')
-        NPM_TOKEN = credentials('npm-publish-token')
-        NPM_CONFIG_CACHE = '.npm'
-        NPM_CONFIG_USERCONFIG = '.npm/rc'
-        SPAWN_WRAP_SHIM_ROOT = '.npm'
         GIT_BRANCH = "${CURRENT_BRANCH}"
         BRANCH_NAME = "${CURRENT_BRANCH}"
         CHANGE_ID = ""
+        NPM_TOKEN = credentials('npm-publish-token')
       }
 
       steps {
-        sh 'mkdir -p .npm'
-        sh 'npm install'
-        sh "npm run release -- --dry-run --no-ci --branches ${CURRENT_BRANCH}"
+        script {
+          sh "mkdir -p ${NPM_CONFIG_CACHE}"
+          sh 'npm install'
+          sh "npm run release:dry"
+        }
       }
     }
 
     stage('Release') {
       when {
-        beforeAgent true
-        branch 'main'
+        branch DEFAULT_BRANCH
+        not {
+          changelog '\\[skip ci\\]'
+        }
       }
 
       agent {
         docker {
-          image "us.gcr.io/logdna-k8s/node:12-ci"
+          label 'ec2-fleet'
+          image "us.gcr.io/logdna-k8s/node:16-ci"
           customWorkspace "${PROJECT_NAME}-${BUILD_NUMBER}"
         }
       }
 
       environment {
-        GITHUB_TOKEN = credentials('github-api-token')
+        GIT_BRANCH = "${CURRENT_BRANCH}"
+        BRANCH_NAME = "${CURRENT_BRANCH}"
+        CHANGE_ID = ""
         NPM_TOKEN = credentials('npm-publish-token')
-        NPM_CONFIG_CACHE = '.npm'
-        NPM_CONFIG_USERCONFIG = '.npm/rc'
-        SPAWN_WRAP_SHIM_ROOT = '.npm'
-        GIT_AUTHOR_NAME = 'LogDNA Bot'
-        GIT_AUTHOR_EMAIL = 'bot@logdna.com'
-        GIT_COMMITTER_NAME = 'LogDNA Bot'
-        GIT_COMMITTER_EMAIL = 'bot@logdna.com'
       }
 
       steps {
-        sh 'mkdir -p .npm'
-        sh 'npm install'
-        sh 'npm run release'
+        script {
+          sh "mkdir -p ${NPM_CONFIG_CACHE}"
+          sh 'npm install'
+          sh 'npm run release'
+        }
       }
     }
   }
