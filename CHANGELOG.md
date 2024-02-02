@@ -1,5 +1,12 @@
 ## Changelog
 
+## [3.0.4](https://github.com/logdna/pino-logdna/compare/v3.0.3...v3.0.4) (2024-02-02)
+
+
+### Chores
+
+* bump logdna/logger-node@2.6.8 [422c26f](https://github.com/logdna/pino-logdna/commit/422c26fd4df9c4fc0646c76e45bf9eab722940a3) - Mike Del Tito, closes: [#14](https://github.com/logdna/pino-logdna/issues/14)
+
 ## [3.0.3](https://github.com/logdna/pino-logdna/compare/v3.0.2...v3.0.3) (2022-06-29)
 
 
