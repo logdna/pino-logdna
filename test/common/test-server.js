@@ -30,8 +30,8 @@ module.exports = function create(test) {
       server.listen(listen_port)
       await once(server, 'listening')
 
-      const {address, port} = server.address()
-      return `http://${address}:${port}`
+      const {port} = server.address()
+      return `http://localhost:${port}`
     }
   , async close() {
       server.close()
